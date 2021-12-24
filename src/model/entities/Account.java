@@ -5,6 +5,8 @@
  */
 package model.entities;
 
+import model.exceptions.BusinessException;
+
 /**
  *
  * @author Gustavo
@@ -47,15 +49,20 @@ public class Account {
     public void setWithDrawLimit(Double withDrawLimit){
         this.withDrawLimit = withDrawLimit;
     }
-    public void deposity(Double amount){
+    public void deposity(double amount){
         balance += amount;
     }
-    public void wihtDraw(Double amount){
+    public void wihtDraw(double amount){
+        validetWithdraw(amount);
         balance -= amount;
-    }
-    @Override
-    public String toString(){
-        return "New balance: "+String.format("%.2f%n",balance);
+    }    
+    private void validetWithdraw(double amount){
+        if(amount > getBalance()){
+            throw new BusinessException("Withdraw error: the amount exceeds the withdraw limit");
+        }
+        if(amount > getWithDrawLimit()){
+            throw new BusinessException("Balance error: insifficient balance");
+        }
     }
 }
 
